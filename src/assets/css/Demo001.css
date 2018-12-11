@@ -1,0 +1,55 @@
+.demo-page {
+  height: 100%;
+  width: 100%;
+}
+.demo-page .video-page {
+  height: 100%;
+  width: 100%;
+}
+.demo-page .video-page video#bgvid {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  background: url('../../assets/img/testImg.jpg') no-repeat;
+  background-size: cover;
+  object-fit: fill;
+}
+.demo-page .nav-head {
+  height: 40px;
+  font-size: 0;
+  padding: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+}
+.demo-page .nav-head .nav-item {
+  font-size: 15px;
+  display: inline-block;
+  width: 50%;
+  margin: 0;
+  height: 40px;
+  line-height: 40px;
+}
+.demo-page .content1 {
+  background-color: blue;
+  width: 100%;
+}
+.demo-page .content2 {
+  background-color: red;
+  animation: leftToRight 20s;
+  width: 100%;
+}
+@keyframes leftToRight {
+  from {
+    transform: translateX(10%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+/*# sourceMappingURL=Demo001.css.map */
