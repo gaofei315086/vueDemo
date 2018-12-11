@@ -23,30 +23,62 @@
     background-color: white;
     z-index: 1000;
     .nav-item{
-        font-size: 15px;
+      font-size: 15px;
+      display: inline-block;
+      width: 50%;
+      margin: 0;
+      height: 40px;
+      line-height: 40px;
+      div{
+        position: relative;
         display: inline-block;
-        width: 50%;
-        margin: 0;
-        height: 40px;
-        line-height: 40px;
+        .process{
+          width: 100%;
+          height: 1px;
+          border-top: solid 2px red;
+          position: absolute;
+          bottom:4px;
+          left: 0;
+          animation: processGo 1s ease;
+          animation-fill-mode: forwards;
+        }
+      }
     }
   }
-  .content1{
-    background-color: blue;
-    width: 100%;
-  }
-  .content2{
-    background-color: red;
-    animation: leftToRight 20s;
-    width: 100%;
+  .content{
+    position: relative;
+    overflow: hidden;
+    .content1{
+      background-color: yellow;
+      width: 100%;
+    }
+    .content2{
+      background-color: green;
+      position: relative;
+    }
   }
 }
 
 @keyframes leftToRight {
     from{
-      transform: translateX(10%);
+      transform: translateX(100%);
     }
     to{
-      transform: translateX(0);
+      transform: translateX(0%);
     }
+}
+
+@keyframes processGo {
+    0% {
+      left: 0;
+      width: 100%;
+    }
+    100% {
+      left: 100px;
+      width: 200px;
+    }
+    //100%{
+    //  left: 200px;
+    //  width: 100%;
+    //}
 }

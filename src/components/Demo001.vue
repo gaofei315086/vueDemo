@@ -7,10 +7,19 @@
         <button ref="myButton" @click="go">点击播放</button>
       </section>
       <section class="nav-head" ref="nav_head">
-        <div class="nav-item">课程介绍</div>
-        <div class="nav-item">课程列表</div>
+        <div class="nav-item">
+          <div>
+            课程介绍
+            <div ref="process" class="process"></div>
+          </div>
+        </div>
+        <div class="nav-item">
+          <div>
+            课程列表
+          </div>
+        </div>
       </section>
-      <div ref="content">
+      <div class="content" ref="content">
         <section ref="content1" v-show="show_content === 0" @touchstart="touchstart" @touchend="touchend" @touchmove="touchmove" class="content1 animated fadeInLeft">
           <div>1</div>
           <div>11</div>
@@ -91,7 +100,7 @@
           <div>1</div>
           <div>1</div>
         </section>
-        <section ref="content2" v-show="show_content === 1" @touchstart="touchstart" @touchend="touchend" @touchmove="touchmove" class="content2 animated fadeInLeft">
+        <section ref="content2" v-show="show_content === 1" @touchstart="touchstart" @touchend="touchend" @touchmove="touchmove" class="content2 animated fadeInRight">
           <div>1</div>
           <div>11</div>
           <div>111</div>
@@ -236,9 +245,13 @@
           touchend:function (e) {
               // 向右滑动
             if(this.touch_move.x -this.touch_start.x < 0 && this.touch_start.x - this.touch_move.x >50){
+              // this.$refs.process.style.width = '300px'
+              // this.$refs.process.style.left = '100px'
               this.show_content = 1;
             }else if(this.touch_move.x -this.touch_start.x > 0 && this.touch_move.x -this.touch_start.x>50){
               this.show_content = 0;
+              // this.$refs.process.style.width = '100%'
+              // this.$refs.process.style.left = '0'
             }
           },
           //  获取距离body的距离
@@ -254,7 +267,6 @@
           handleScroll () {
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             // 滚动到顶部固定导航栏
-            console.log( window.pageYOffset,document.documentElement.scrollTop,document.body.scrollTop,document.body.offsetHeight);
             if(scrollTop>=document.body.offsetHeight){
               this.$refs.nav_head.style.position = 'fixed';
               this.$refs.nav_head.style.top = 0+'px';
