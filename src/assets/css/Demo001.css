@@ -46,8 +46,7 @@
   position: absolute;
   bottom: 4px;
   left: 0;
-  animation: processGo 1s ease;
-  animation-fill-mode: forwards;
+  transition: width 0.5s linear, left 0.5s linear;
 }
 .demo-page .content {
   position: relative;
@@ -73,10 +72,6 @@
   0% {
     left: 0;
     width: 100%;
-  }
-  100% {
-    left: 100px;
-    width: 200px;
   }
 }
 /*# sourceMappingURL=Demo001.css.map */

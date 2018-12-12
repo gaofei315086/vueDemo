@@ -39,8 +39,9 @@
           position: absolute;
           bottom:4px;
           left: 0;
-          animation: processGo 1s ease;
-          animation-fill-mode: forwards;
+          transition: width .5s linear,left .5s linear;
+          //animation: processGo 1s ease;
+          //animation-fill-mode: forwards;
         }
       }
     }
@@ -74,11 +75,5 @@
       width: 100%;
     }
     100% {
-      left: 100px;
-      width: 200px;
     }
-    //100%{
-    //  left: 200px;
-    //  width: 100%;
-    //}
 }

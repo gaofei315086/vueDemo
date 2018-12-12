@@ -7,8 +7,8 @@
         <button ref="myButton" @click="go">点击播放</button>
       </section>
       <section class="nav-head" ref="nav_head">
-        <div class="nav-item">
-          <div>
+        <div class="nav-item" ref="nav_item">
+          <div ref="text_desc">
             课程介绍
             <div ref="process" class="process"></div>
           </div>
@@ -188,10 +188,13 @@
 
 <script>
     import wx from 'weixin-js-sdk'
+    import $ from 'jquery'
     export default {
         name: "Demo001",
         data:function(){
           return{
+            // keyframe对象
+            cssRule:{},
             // 选择我展现内容
             show_content:0,
             // 滑动开始坐标
@@ -207,13 +210,21 @@
         },
             watch:{
         },
+        created:function(){
+
+        },
         mounted:function () {
           console.log(window);
-          // this.$refs.nav_head.style.width = window.innerWidth+'px';
-          // this.$refs.content.style.width = window.innerWidth+'px';
-          // this.$refs.content2.style.width = window.innerWidth+'px';
           window.addEventListener('scroll', this.handleScroll);
           this.audioAutoPlay('bgvid');
+          // this.cssRule = this.getRule('processGo');
+          // 动态修改iframe！！！！
+          // this.cssRule.deleteRule(0);
+          // this.cssRule.deleteRule(1);
+          // this.cssRule.appendRule('0% { left: 0;width: 100%; }');
+          // this.cssRule.appendRule('100% { left: 200px;width: 100%; }');
+          // 重新指定动画名字使之生效  vue 生成的 class 带了data-value的随机码 只能动态获取
+          // document.querySelector('.process').style.webkitAnimationName = this.cssRule.name;
         },
         methods:{
             go:function () {
@@ -243,13 +254,23 @@
           },
           // 监听滑动结束
           touchend:function (e) {
+            // 计算线条最大宽度
+            var maxWidth = (this.$refs.nav_item.offsetWidth - this.$refs.text_desc.offsetWidth)/2 + this.$refs.text_desc.offsetWidth
               // 向右滑动
             if(this.touch_move.x -this.touch_start.x < 0 && this.touch_start.x - this.touch_move.x >50){
-              // this.$refs.process.style.width = '300px'
-              // this.$refs.process.style.left = '100px'
               this.show_content = 1;
+              this.$refs.process.style.width = maxWidth + 'px'
+              this.$refs.process.style.left = this.$refs.nav_item.offsetWidth +'px'
+              window.setTimeout(()=>{
+                this.$refs.process.style.width = '100%'
+              },250)
             }else if(this.touch_move.x -this.touch_start.x > 0 && this.touch_move.x -this.touch_start.x>50){
               this.show_content = 0;
+              this.$refs.process.style.width = maxWidth + 'px'
+              this.$refs.process.style.left = '0px'
+              window.setTimeout(()=>{
+                this.$refs.process.style.width = '100%'
+              },250)
               // this.$refs.process.style.width = '100%'
               // this.$refs.process.style.left = '0'
             }
@@ -264,7 +285,7 @@
             return offsetTop
           },
           // 监听窗体滚动
-          handleScroll () {
+          handleScroll:function() {
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             // 滚动到顶部固定导航栏
             if(scrollTop>=document.body.offsetHeight){
@@ -273,6 +294,21 @@
               this.$refs.nav_head.style.zIndex = '1000';
             }else{
               this.$refs.nav_head.style.position = 'inherit';
+            }
+          },
+          //todo 转移至公用方法
+         getRule:function(name) {
+            var rule;
+            var ss = document.styleSheets
+            for (var i = 0; i < ss.length; ++i) {
+              // loop through all the rules!
+              for (var x = 0; x < ss[i].cssRules.length; ++x) {
+                rule = ss[i].cssRules[x];
+                if (rule.name && rule.name.indexOf(name)!== -1 && rule.type == CSSRule.KEYFRAMES_RULE) {
+                  // debugger
+                  return rule
+                }
+              }
             }
           }
         }
