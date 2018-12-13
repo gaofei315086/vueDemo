@@ -217,6 +217,16 @@
           console.log(window);
           window.addEventListener('scroll', this.handleScroll);
           this.audioAutoPlay('bgvid');
+
+          // var styleEl = document.createElement('style'),
+          //   styleSheet;
+          // document.head.appendChild(styleEl);
+          // // 获取样式
+          // styleSheet = styleEl.sheet;
+          // // 插入样式
+          // styleSheet.insertRule('@keyframes processGo { 0% {left: 0;width: 100%;} 100% { left: 200px;width: 100%; } }', styleSheet.cssRules.length);
+
+
           // this.cssRule = this.getRule('processGo');
           // 动态修改iframe！！！！
           // this.cssRule.deleteRule(0);
@@ -255,21 +265,29 @@
           // 监听滑动结束
           touchend:function (e) {
             // 计算线条最大宽度
-            var maxWidth = (this.$refs.nav_item.offsetWidth - this.$refs.text_desc.offsetWidth)/2 + this.$refs.text_desc.offsetWidth
+            // var maxWidth = (this.$refs.nav_item.offsetWidth - this.$refs.text_desc.offsetWidth)/2 + this.$refs.text_desc.offsetWidth
               // 向右滑动
-            if(this.touch_move.x -this.touch_start.x < 0 && this.touch_start.x - this.touch_move.x >50){
+            if(this.touch_move.x -this.touch_start.x < 0 && this.touch_start.x - this.touch_move.x >50 && this.show_content === 0){
               this.show_content = 1;
-              this.$refs.process.style.width = maxWidth + 'px'
-              this.$refs.process.style.left = this.$refs.nav_item.offsetWidth +'px'
+              // console.info(maxWidth)
+              this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
+              this.$refs.process.style.left = this.$refs.process.offsetWidth/2 +'px'
+              // 利用延时处理，实现transform处理多段动画变换
               window.setTimeout(()=>{
                 this.$refs.process.style.width = '100%'
+                this.$refs.process.style.left = this.$refs.nav_item.offsetWidth +'px'
+                // 重写就可以重新出发动画效果
+                this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
               },250)
-            }else if(this.touch_move.x -this.touch_start.x > 0 && this.touch_move.x -this.touch_start.x>50){
+            }else if(this.touch_move.x -this.touch_start.x > 0 && this.touch_move.x -this.touch_start.x>50 && this.show_content === 1){
               this.show_content = 0;
-              this.$refs.process.style.width = maxWidth + 'px'
-              this.$refs.process.style.left = '0px'
+              // this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
+              this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
+              this.$refs.process.style.left = this.$refs.process.offsetWidth/2 +'px'
               window.setTimeout(()=>{
+                this.$refs.process.style.left = '0'
                 this.$refs.process.style.width = '100%'
+                this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
               },250)
               // this.$refs.process.style.width = '100%'
               // this.$refs.process.style.left = '0'

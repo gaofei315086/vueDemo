@@ -46,7 +46,7 @@
   position: absolute;
   bottom: 4px;
   left: 0;
-  transition: width 0.5s linear, left 0.5s linear;
+  transition: width 0.25s linear, left 0.25s linear;
 }
 .demo-page .content {
   position: relative;
