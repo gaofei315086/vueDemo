@@ -218,6 +218,9 @@
           window.addEventListener('scroll', this.handleScroll);
           this.audioAutoPlay('bgvid');
 
+          // 监听进度条动画完成  处理transition多段变换
+          this.$refs.process.addEventListener('transitionend',this.processFinish)
+
           // var styleEl = document.createElement('style'),
           //   styleSheet;
           // document.head.appendChild(styleEl);
@@ -269,26 +272,12 @@
               // 向右滑动
             if(this.touch_move.x -this.touch_start.x < 0 && this.touch_start.x - this.touch_move.x >50 && this.show_content === 0){
               this.show_content = 1;
-              // console.info(maxWidth)
               this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
               this.$refs.process.style.left = this.$refs.process.offsetWidth/2 +'px'
-              // 利用延时处理，实现transform处理多段动画变换
-              window.setTimeout(()=>{
-                this.$refs.process.style.width = '100%'
-                this.$refs.process.style.left = this.$refs.nav_item.offsetWidth +'px'
-                // 重写就可以重新出发动画效果
-                this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
-              },250)
             }else if(this.touch_move.x -this.touch_start.x > 0 && this.touch_move.x -this.touch_start.x>50 && this.show_content === 1){
               this.show_content = 0;
-              // this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
               this.$refs.process.style.width = this.$refs.nav_item.offsetWidth + 'px'
               this.$refs.process.style.left = this.$refs.process.offsetWidth/2 +'px'
-              window.setTimeout(()=>{
-                this.$refs.process.style.left = '0'
-                this.$refs.process.style.width = '100%'
-                this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
-              },250)
               // this.$refs.process.style.width = '100%'
               // this.$refs.process.style.left = '0'
             }
@@ -328,6 +317,20 @@
                 }
               }
             }
+          },
+          // 动画监听
+          processFinish:function () {
+            // 重写就可以重新出发动画效果
+            if(this.show_content === 1){
+              this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
+              this.$refs.process.style.width = '100%'
+              this.$refs.process.style.left = this.$refs.nav_item.offsetWidth +'px'
+            }else if(this.show_content === 0){
+              this.$refs.process.style.left = '0'
+              this.$refs.process.style.width = '100%'
+              this.$refs.process.style.transition = 'width .25s linear,left .25s linear'
+            }
+
           }
         }
     }
