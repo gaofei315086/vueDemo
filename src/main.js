@@ -12,5 +12,9 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  beforeCreate:function () {
+    // 不能写75 因为谷歌默认字体大小为12，如果是75 做除法时会导致最终值小于12从而使用默认12的字体
+    document.documentElement.style.fontSize = document.documentElement.clientWidth*2 / 7.5 + 'px';
+  }
 })

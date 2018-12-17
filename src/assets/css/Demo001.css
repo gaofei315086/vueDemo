@@ -20,7 +20,7 @@
   object-fit: fill;
 }
 .demo-page .nav-head {
-  height: 40px;
+  height: 0.4rem;
   font-size: 0;
   padding: 0;
   width: 100%;
@@ -28,12 +28,12 @@
   z-index: 1000;
 }
 .demo-page .nav-head .nav-item {
-  font-size: 15px;
+  font-size: 0.15rem;
   display: inline-block;
   width: 50%;
   margin: 0;
-  height: 40px;
-  line-height: 40px;
+  height: 0.4rem;
+  line-height: 0.4rem;
 }
 .demo-page .nav-head .nav-item div {
   position: relative;
@@ -41,16 +41,17 @@
 }
 .demo-page .nav-head .nav-item div .process {
   width: 100%;
-  height: 1px;
-  border-top: solid 2px red;
+  height: 0.01rem;
+  border-top: solid 0.02rem red;
   position: absolute;
-  bottom: 4px;
+  bottom: 0.04rem;
   left: 0;
   transition: width 0.25s linear, left 0.25s linear;
 }
 .demo-page .content {
   position: relative;
   overflow: hidden;
+  font-size: 0.15rem;
 }
 .demo-page .content .content1 {
   background-color: yellow;
