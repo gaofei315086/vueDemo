@@ -15,7 +15,7 @@
               onEnter:function () {
                 this._super();
                 var size = cc.director.getWinSize();
-                var sprite = cc.Sprite.create("HelloWorld.png");
+                var sprite = cc.Sprite.create("../assets/HelloWorld.png");
                 sprite.setPosition(size.width / 2, size.height / 2);
                 sprite.setScale(0.8);
                 this.addChild(sprite, 0);
