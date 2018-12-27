@@ -213,6 +213,11 @@
         created:function(){
 
         },
+        destroyed:function(){
+          //取消监听离开时
+          // console.info(this.handleScroll)
+          window.removeEventListener('scroll',this.handleScroll);
+        },
         mounted:function () {
           console.log(window);
           window.addEventListener('scroll', this.handleScroll);
@@ -320,6 +325,7 @@
           },
           // 动画监听
           processFinish:function () {
+              debugger
             // 重写就可以重新出发动画效果
             if(this.show_content === 1){
               this.$refs.process.style.transition = 'width .25s linear,left .25s linear'

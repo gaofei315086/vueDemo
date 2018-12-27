@@ -22,8 +22,48 @@
 </template>
 
 <script>
+    import * as Sentry from '@sentry/browser'
+    import modelA from '../model/modelA'
     export default {
-        name: "svgDemo"
+        name: "svgDemo",
+      mounted:function () {
+        // Sentry.addBreadcrumb({
+        //   category: 'auth',
+        //   message: 'Authenticated user ',
+        //   level: 'info'
+        // });
+        let params = {
+          x:1,
+          y:2
+        }
+        let viewA = new modelA(params)
+        console.info(this.getCount(17))
+        // try{
+        //   throw new DOMException('我是一个svg异常')
+        // }catch(err){
+        //   console.info(err)
+        //   Sentry.captureException(err);
+        // }
+      },
+      methods:{
+          getCount:function (month) {
+            // 边界值
+            if(month === 1){
+              return {
+                'a':0.8*0.2+0.2*0.3+0.1*0.5,
+                'b':0.7*0.3+0.1*0.2+0.3*0.5,
+                'c':0.6*0.5+0.1*0.2+0.1*0.3
+              }
+            }else{
+              var temp = this.getCount(--month)
+              return{
+                'a':0.8*temp.a+0.2*temp.b+0.1*temp.c,
+                'b':0.7*temp.b+0.1*temp.a+0.3*temp.c,
+                'c':0.6*temp.c+0.1*temp.a+0.1*temp.b
+              }
+            }
+          }
+      }
     }
 </script>
 
