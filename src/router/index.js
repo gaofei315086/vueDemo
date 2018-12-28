@@ -7,6 +7,7 @@ import cocosTest from '@/components/cocosTest'
 Vue.use(Router)
 
 export default new Router({
+  mode:'hash',
   routes: [
     {
       path: '/Demo001',

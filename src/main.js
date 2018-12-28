@@ -44,6 +44,10 @@ new Vue({
       // 设置拓展字段
       scope.setExtra("character_name", "Mighty Fighter");
     });
+
+    // 初始化cocos2d
+
+
     // try{
     //   throw new DOMException('我是一个异常')
     // }catch(err){

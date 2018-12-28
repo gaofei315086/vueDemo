@@ -1,4 +1,4 @@
-var cc = cc || {};
+console.info('gaofei');var cc = cc || {};
 cc._tmp = cc._tmp || {};
 cc._LogInfos = {};
 var _p = window;
