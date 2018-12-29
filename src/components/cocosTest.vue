@@ -11,7 +11,6 @@
     export default {
         name: "cocosTest",
       mounted:function () {
-        console.info('cocosTest')
         //加入主任务使外部引入js先执行
         window.setTimeout(()=>{
           this.initCC();
@@ -19,7 +18,6 @@
       },
       methods:{
           initCC:function () {
-            console.info(window.cc)
             // 如果未获取到cocos插件就递归调用直到获取到位置
             if(!window.cc){
               console.info('init')
@@ -30,24 +28,67 @@
             }
             cc.game.onStart = function(){
               // 1.load resources
-              cc.LoaderScene.preload(["../../static/img/HelloWorld.png",'../../static/img/testImg.jpg','../../static/img/clock.jpg'], function () {
-                // var MyScene = cc.Scene.extend({
-                //   onEnter:function () {
-                //     this._super();
-                //     var size = cc.director.getWinSize();
-                //     var sprite = cc.Sprite.create("../assets/HelloWorld.png");
-                //     sprite.setPosition(size.width / 2, size.height / 2);
-                //     sprite.setScale(0.8);
-                //     this.addChild(sprite, 0);
-                //
-                //     var label = cc.LabelTTF.create("Hello World", "Arial", 40);
-                //     label.setPosition(size.width / 2, size.height / 2);
-                //     this.addChild(label, 1);
-                //   }
-                // });
-                // cc.director.runScene(new MyScene());
-
+              cc.LoaderScene.preload(["../../static/img/HelloWorld.png",'../../static/img/testImg.jpg','../../static/img/clock.jpg','../../static/img/shuidi.png'], function () {
                 // cocos只能访问到static下的静态图片
+                var PlayerLayer = cc.Layer.extend({
+                  // 精灵个数
+                  SushiSprites:null,
+                  ctor:function () {
+                    this._super();
+                    // 初始化
+                    this.SushiSprites = [];
+
+                    // add bg
+                    this.bgSprite = new cc.Sprite('../../static/img/testImg.jpg');
+                    this.bgSprite.attr({
+                      x: 40,
+                      y: 40,
+                    });
+                    this.addChild(this.bgSprite, 0);
+
+                    // this.addSushi();
+                    // 循环产生多个元素
+                    this.schedule(this.update,1,16*1024,1);
+                    return true;
+                  },
+                  addSushi : function() {
+                    // 添加动态元素
+                    var sushi = new cc.Sprite('../../static/img/shuidi.png');
+                    var size = cc.winSize;
+
+                    var x = sushi.width/2+size.width/2*cc.random0To1();
+                    sushi.attr({
+                      x: x,
+                      y:size.height - 30
+                    });
+
+                    // 让元素动起来
+                    var dorpAction = cc.MoveTo.create(4, cc.p(sushi.x,-30));
+                    sushi.runAction(dorpAction);
+
+                    this.addChild(sushi,5);
+                    this.SushiSprites.push(sushi);
+                  },
+                  update : function() {
+                    // 多个元素
+                    this.addSushi();
+                    this.removeSushi();
+                  },
+                  removeSushi : function() {
+                    //移除到屏幕底部的sushi
+                    for (var i = 0; i < this.SushiSprites.length; i++) {
+                      cc.log("removeSushi.........");
+                      if(0 == this.SushiSprites[i].y) {
+                        cc.log("==============remove:"+i);
+                        this.SushiSprites[i].removeFromParent();
+                        this.SushiSprites[i] = undefined;
+                        this.SushiSprites.splice(i,1);
+                        i= i-1;
+                      }
+                    }
+                  }
+                });
+
                 var StartLayer = cc.Layer.extend({
                   ctor:function () {
                     this._super();
@@ -77,7 +118,7 @@
                       '../../static/img/HelloWorld.png',
                       function () {
                         console.info('111');
-                        cc.log("Menu is clicked!");
+                        cc.director.runScene(new PlayerScene());
                       }, this);
                     startItem.attr({
                       x: size.width/2,
@@ -94,10 +135,19 @@
                     return true;
                   }
                 });
+
                 var StartScene = cc.Scene.extend({
                   onEnter:function () {
                     this._super();
                     var layer = new StartLayer();
+                    this.addChild(layer);
+                  }
+                });
+
+                var PlayerScene = cc.Scene.extend({
+                  onEnter:function () {
+                    this._super();
+                    var layer = new PlayerLayer();
                     this.addChild(layer);
                   }
                 });
