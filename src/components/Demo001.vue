@@ -325,7 +325,6 @@
           },
           // 动画监听
           processFinish:function () {
-              debugger
             // 重写就可以重新出发动画效果
             if(this.show_content === 1){
               this.$refs.process.style.transition = 'width .25s linear,left .25s linear'

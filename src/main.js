@@ -8,6 +8,18 @@ import * as Sentry from '@sentry/browser'
 
 Vue.config.productionTip = false
 
+var initCC = function () {
+  // 如果未获取到cocos插件就递归调用直到获取到位置
+  if(!window.cc){
+    console.info('init')
+    window.setTimeout(()=>{
+      initCC()
+    },10)
+    return
+  }
+}
+initCC();
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

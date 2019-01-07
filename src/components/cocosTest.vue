@@ -20,16 +20,83 @@
           initCC:function () {
             // 如果未获取到cocos插件就递归调用直到获取到位置
             if(!window.cc){
-              console.info('init')
               window.setTimeout(()=>{
                 this.initCC()
               },10)
               return
             }
+
             cc.game.onStart = function(){
               // 1.load resources
               cc.LoaderScene.preload(["../../static/img/HelloWorld.png",'../../static/img/testImg.jpg','../../static/img/clock.jpg','../../static/img/shuidi.png'], function () {
                 // cocos只能访问到static下的静态图片
+                // 创建自定义精灵类
+                var SushiSprite = cc.Sprite.extend({
+                  disappearAction:null,//消失动画
+                  onEnter:function () {
+                    cc.log("onEnter");
+                    // 创建精灵时为其自动加入触摸事件
+                    this.addTouchEventListenser();
+                    this.disappearAction = this.createDisappearAction();
+                    // 对生成的消失动画增加一次引用
+                    this.disappearAction.retain();
+                    this._super();
+                  },
+                  onExit:function () {
+                    // 手动释放引用
+                    this.disappearAction.release();
+                    cc.log("onExit");
+                  },
+                  // 添加触摸事件
+                  addTouchEventListenser:function(){
+                    this.touchListener = cc.EventListener.create({
+                      event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                      // When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
+                      swallowTouches: true,
+                      //onTouchBegan event callback function
+                      onTouchBegan: function (touch, event) {
+                        var pos = touch.getLocation();
+                        var target = event.getCurrentTarget();
+                        // 在SushiSprite被点中后，`removeTouchEventListenser()`移除注册的touch事件避免被再次点击。`stopAllActions()`停止SUshiSprite正在播放的动作。`cc.Sequence`是按序列播放动作。`cc.CallFunc`是Cocos2d-JS中提供的动画播放结束的处理回调。上面的代码通过cc.Sequence创建了Sushi消失的动作序列，并在动作结束后从层上移除SushiSprite.
+                        // target.removeTouchEventListenser();
+                        cc.eventManager.removeListener(this.touchListener,this);
+                        //响应精灵点中
+                        cc.log("pos.x="+pos.x+",pos.y="+pos.y);
+
+                        target.stopAllActions();
+
+                        var ac = target.disappearAction;
+                        var seqAc = cc.Sequence.create( ac, cc.CallFunc.create(function () {
+                          target.removeFromParent();
+                        },target) );
+                        target.runAction(seqAc);
+                        if ( cc.rectContainsPoint(target.getBoundingBox(),pos)) {
+                          console.info('log')
+                          return true;
+                        }
+                        return false;
+                      }
+                    });
+                    cc.eventManager.addListener(this.touchListener,this);
+                  },
+                  createDisappearAction : function() {
+                    var frames = [];
+                    for (var i = 0; i < 11; i++) {
+                      var str = "sushi_1n_"+i+".png"
+                      //cc.log(str);
+                      var frame = cc.spriteFrameCache.getSpriteFrame(str);
+                      console.table(cc.spriteFrameCache.getSpriteFrame(str));
+                      frames.push(frame);
+                    }
+
+                    var animation = new cc.Animation(frames, 0.02);
+                    var action = new cc.Animate(animation);
+
+                    return action;
+                  },
+                });
+
+
                 var PlayerLayer = cc.Layer.extend({
                   // 精灵个数
                   SushiSprites:null,
@@ -37,6 +104,9 @@
                     this._super();
                     // 初始化
                     this.SushiSprites = [];
+
+                    // 加载帧图片
+                    cc.spriteFrameCache.addSpriteFrames('../../static/img/sushi.plist');
 
                     // add bg
                     this.bgSprite = new cc.Sprite('../../static/img/testImg.jpg');
@@ -53,7 +123,9 @@
                   },
                   addSushi : function() {
                     // 添加动态元素
-                    var sushi = new cc.Sprite('../../static/img/shuidi.png');
+                    // var sushi = new cc.Sprite('../../static/img/shuidi.png');
+
+                    var sushi = new SushiSprite('../../static/img/sushi.png');
                     var size = cc.winSize;
 
                     var x = sushi.width/2+size.width/2*cc.random0To1();
@@ -117,7 +189,6 @@
                       '../../static/img/clock.jpg',
                       '../../static/img/HelloWorld.png',
                       function () {
-                        console.info('111');
                         cc.director.runScene(new PlayerScene());
                       }, this);
                     startItem.attr({
@@ -151,11 +222,10 @@
                     this.addChild(layer);
                   }
                 });
+
                 cc.director.runScene(new StartScene());
               }, this);
             };
-
-
             cc.game.run("gameCanvas");
           }
       }
